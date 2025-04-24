@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model: basic test</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Model: currentTime test</h1>
+    <hr />
+    <p>
+      When a model has an animation, its <code>currentTime</code> attribute can
+      be read and written to update the animation's progress.
+    </p>
+    <h2>JavaScript</h2>
+
+    <pre>
+&lt;script>
+  model.currentTime = 2.5;
+&lt;/script>
+    </pre>
+
+    <model alt="A model of a teapot with a hidden creature">
+      <source src="./teapot.usdz" type="model/vnd.usdz+zip" />
+      <source src="./teapot.glb" type="model/gltf-binary" />
+      <img src="./teapot-fallback-animated.jpg" alt="An image of a model of a teapot with a creature inside" >
+    </model>
+    <br />
+    Current time:
+    <span id="timelabel"></span>
+    <input type="range" min="0" max="1" value="0" step="0.02" id="time" />
+  </body>
+
+  <script>
+    (async () => {
+      const model = document.querySelector("model");
+      await model.ready;
+      time.addEventListener("input", (e) => {
+        timelabel.innerHTML = (time.value * model.duration).toFixed(1) + "s";
+        model.currentTime = time.value * model.duration;
+      });
+    })();
+  </script>
+</html>

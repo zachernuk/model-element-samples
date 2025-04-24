@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model auto-rotate</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Model: auto-rotate test</h1>
+    <hr />
+    <p>
+      A model's <code>DOMMatrixReadOnly entityTransform</code> can be set to
+      display a certain side, or to automatically animate the content.
+    </p>
+
+    <h2>HTML</h2>
+    <pre>
+&lt;model id="model" alt="A model of a teapot">
+    &lt;source src="./teapot.usdz" type="model/vnd.usdz+zip" />
+    &lt;source src="./teapot.glb"  type="model/gltf-binary" />
+&lt;/model>
+</pre
+    >
+    <h2>JavaScript:</h2>
+    <pre>
+&lt;script type="module">
+    let initialTransform;
+    await model.ready;
+    initialTransform = model.entityTransform.translate(0,0,-0.05);
+    requestAnimationFrame(update);
+
+    function update() {
+        try {
+            const angleY = performance.now()/10;
+            model.entityTransform = initialTransform.rotate(0, angleY,0);
+        } catch(error) {
+            console.warn("failed to set transform", error);
+        }
+        requestAnimationFrame(update);
+    }
+&lt;/script></pre
+    >
+
+    <br />
+
+    <model id="model" alt="A model of a teapot">
+      <source src="./teapot.usdz" type="model/vnd.usdz+zip" />
+      <source src="./teapot.glb" type="model/gltf-binary" />
+      <img src="./teapot-fallback-black.jpg" alt="An image of a model of a teapot" >
+    </model>
+  </body>
+  <script type="module">
+    let initialTransform;
+    await model.ready;
+    initialTransform = model.entityTransform.translate(0, 0, -0.05);
+    requestAnimationFrame(update);
+
+    function update() {
+      try {
+        const angleY = performance.now() / 10;
+        model.entityTransform = initialTransform.rotate(0, angleY, 0);
+      } catch (error) {
+        console.warn("failed to set transform", error);
+      }
+      requestAnimationFrame(update);
+    }
+  </script>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model: basic DataURL test</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Model: Basic DataURL test overriding type</h1>
+    <hr />
+
+    <h2>HTML</h2>
+    <pre>
+&lt;model alt="A model of a teapot" data-src="./teapot.usdz" data-type="model/vnd.usdz+zip">
+&lt;/model>
+    </pre>
+    <h2>JavaScript</h2>
+<pre>
+const model = document.querySelector('model');
+const {src, type} = model.dataset;
+const bytes = await (await fetch(src)).bytes();
+const srcString = URL.createObjectURL(new Blob([bytes], {type}));
+model.setAttribute('src', srcString);
+</pre>
+
+    <model draggable="true" alt="A model of a teapot" data-type="model/vnd.usdz+zip"  data-src="./teapot.usdz">
+      <img src="./teapot-fallback-black.jpg" alt="An image of a model of a teapot" >
+    </model>
+  </body>
+
+  
+  <script type="module">
+    const model = document.querySelector('model');
+    const {src, type} = model.dataset;
+    const bytes = await (await fetch(src)).bytes();
+    const srcString = URL.createObjectURL(new Blob([bytes], {type}));
+    model.setAttribute('src', srcString);
+  </script>
+</html>
