@@ -17,35 +17,35 @@
 
     <h2>HTML</h2>
     <pre>
-&lt;model id="model" alt="A model of a teapot">
-    &lt;source src="./teapot.usdz" type="model/vnd.usdz+zip" />
-    &lt;source src="./teapot.glb"  type="model/gltf-binary" />
-&lt;/model>
+&lt;model alt="A model of a teapot"&gt;
+    &lt;source src="./teapot.usdz" type="model/vnd.usdz+zip" /&gt;
+    &lt;source src="./teapot.glb"  type="model/gltf-binary" /&gt;
+&lt;/model&gt;
 </pre
     >
     <h2>JavaScript:</h2>
     <pre>
-&lt;script type="module">
-    let initialTransform;
-    await model.ready;
-    initialTransform = model.entityTransform.translate(0,0,-0.05);
-    requestAnimationFrame(update);
+let initialTransform;
+const model = document.querySelector('model');
+await model.ready;
+initialTransform = model.entityTransform.translate(0,0,-0.05);
+requestAnimationFrame(update);
 
-    function update() {
-        try {
-            const angleY = performance.now()/10;
-            model.entityTransform = initialTransform.rotate(0, angleY,0);
-        } catch(error) {
-            console.warn("failed to set transform", error);
-        }
-        requestAnimationFrame(update);
+function update() {
+    try {
+        const angleY = performance.now()/10;
+        model.entityTransform = initialTransform.rotate(0, angleY,0);
+    } catch(error) {
+        console.warn("failed to set transform", error);
     }
-&lt;/script></pre
+    requestAnimationFrame(update);
+}
+</pre
     >
 
     <br />
 
-    <model id="model" alt="A model of a teapot">
+    <model alt="A model of a teapot">
       <source src="./teapot.usdz" type="model/vnd.usdz+zip" />
       <source src="./teapot.glb" type="model/gltf-binary" />
       <img src="./teapot-fallback-black.jpg" alt="An image of a model of a teapot" >
@@ -53,6 +53,7 @@
   </body>
   <script type="module">
     let initialTransform;
+    const model = document.querySelector('model');
     await model.ready;
     initialTransform = model.entityTransform.translate(0, 0, -0.05);
     requestAnimationFrame(update);

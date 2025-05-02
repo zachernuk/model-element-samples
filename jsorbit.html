@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Model: Orbit test</title>
+    <title>Model: JS-Orbit test</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -24,7 +24,7 @@
     <div id="log"></div>
   </body>
 
-  <script>
+  <script type="module">
     let startDragX, startDragY, omegaX, omegaY;
 
     const VERTICAL_DRAG_FACTOR = 7;
@@ -44,39 +44,6 @@
 
     let pointerDown = false;
     let initialXfo;
-    const model = document.querySelector("model");
-    (async () => {
-      await model.ready;
-      initialXfo = model.entityTransform;
-
-      model.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        document.body.classList.add("noscroll");
-      });
-
-      model.addEventListener("pointerdown", (e) => {
-        pointerDown = true;
-        startDragX = e.clientX - dx;
-        startDragY = e.clientY;
-        vX = 0;
-      });
-
-      window.addEventListener("pointermove", (e) => {
-        if (pointerDown) {
-          dx = e.clientX - startDragX;
-          dy = e.clientY - startDragY;
-          prevX = curX;
-          curX = e.clientX;
-        }
-      });
-
-      window.addEventListener("pointerup", (e) => {
-        pointerDown = false;
-        vX = curX - prevX;
-      });
-      requestAnimationFrame(tick);
-    })();
 
     function tick() {
       requestAnimationFrame(tick);
@@ -105,5 +72,39 @@
             .join("<br>");
       }
     }
+
+    const model = document.querySelector("model");
+
+    await model.ready;
+    initialXfo = model.entityTransform;
+
+    model.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      document.body.classList.add("noscroll");
+    });
+
+    model.addEventListener("pointerdown", (e) => {
+      pointerDown = true;
+      startDragX = e.clientX - dx;
+      startDragY = e.clientY;
+      vX = 0;
+    });
+
+    window.addEventListener("pointermove", (e) => {
+      if (pointerDown) {
+        dx = e.clientX - startDragX;
+        dy = e.clientY - startDragY;
+        prevX = curX;
+        curX = e.clientX;
+      }
+    });
+
+    window.addEventListener("pointerup", (e) => {
+      pointerDown = false;
+      vX = curX - prevX;
+    });
+
+    requestAnimationFrame(tick);
   </script>
 </html>
