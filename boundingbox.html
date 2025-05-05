@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model: Bounding-box information</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Model: Bounding-box information</h1>
+    <hr />
+    <p>
+      after <code>model.ready</code> promise is resolved, a model can report its
+      <code>DOMPoint boundingBoxExtents</code> and
+      <code>DOMPoint boundingBoxCenter</code>.
+    </p>
+
+    <model alt="A model of a teapot">
+      <source src="./teapot.usdz" type="model/vnd.usdz+zip" />
+      <source src="./teapot.glb" type="model/gltf-binary" />
+      <img src="./teapot-fallback-black.jpg" alt="An image of a model of a teapot" >
+    </model>
+    <br />
+    <h2>Report:</h2>
+    <div id="log"></div>
+  </body>
+
+  <script type="module">
+    function writePoint(pt) {
+      return `x: ${pt.x}, y: ${pt.y}, z: ${pt.z}`;
+    }
+
+    const model = document.querySelector("model");
+    await model.ready;
+
+    const log = document.getElementById("log");
+    log.innerHTML = `bounding box center: ${writePoint(
+      model.boundingBoxCenter
+    )} <br/>
+    bounding box extents: ${writePoint(model.boundingBoxExtents)}`;
+  </script>
+</html>

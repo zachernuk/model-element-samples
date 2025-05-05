@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model: Background color test</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      model {
+        width: 400px;
+        height: 400px;
+        background-color: blue;
+      }
+      pre {
+        background-color: rgb(213, 213, 213);
+        display: inline-block;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Model: Background color test</h1>
+    <p>
+      Set the background with CSS. Note that because the model exists in a plane
+      conceptually <em>behind</em> the page, it is not recommended to support a
+      transparent background.
+    </p>
+    <hr />
+    <h2>HTML</h2>
+    <pre>
+&lt;model alt="A model of a teapot"&gt;
+  &lt;source src="./teapot.usdz" type="model/vnd.usdz+zip" /&gt;
+  &lt;source src="./teapot.glb" type="model/gltf-binary" /&gt;
+&lt;/model&gt;
+  </pre
+    >
+    <h2>CSS</h2>
+    <pre>
+model {
+  background-color:blue;
+}
+</pre
+    >
+
+    <model alt="A model of a teapot">
+      <source src="./teapot.usdz" type="model/vnd.usdz+zip" />
+      <source src="./teapot.glb" type="model/gltf-binary" />
+      <img src="./teapot-fallback-blue.jpg" alt="An image of a model of a teapot on a blue background" >
+
+    </model>
+  </body>
+</html>

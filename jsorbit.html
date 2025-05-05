@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model: JS-Orbit test</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Model: JS-Orbit test</h1>
+    <hr />
+    <p>
+      A custom JavaScript-based demonstration of a behavior similar to the
+      expectation for <code>stagemode="orbit"</code> provided by the UA.
+    </p>
+    <h2>Result</h2>
+
+    <model alt="A model of a teapot">
+      <source src="./teapot.usdz" type="model/vnd.usdz+zip" />
+      <source src="./teapot.glb" type="model/gltf-binary" />
+      <img src="./teapot-fallback-black.jpg" alt="An image of a model of a teapot" >
+    </model>
+    <div id="log"></div>
+  </body>
+
+  <script type="module">
+    let startDragX, startDragY, omegaX, omegaY;
+
+    const VERTICAL_DRAG_FACTOR = 7;
+    const HORIZONTAL_DRAG_FACTOR = 5;
+    const VERTICAL_RELEASE_DECAY = 0.9;
+    const HORIZONTAL_RELEASE_DECAY = 0.94;
+    const INPUT_SMOOTH_FACTOR = 0.85;
+
+    let dx = 0;
+    let dy = 0;
+    let smoothDX = 0;
+    let smoothDY = 0;
+    let prevX = 0;
+    let curX = 0;
+    let vX = 0;
+    let errors = {};
+
+    let pointerDown = false;
+    let initialXfo;
+
+    function tick() {
+      requestAnimationFrame(tick);
+      try {
+        if (!pointerDown) {
+          dy *= VERTICAL_RELEASE_DECAY;
+          vX *= HORIZONTAL_RELEASE_DECAY;
+          dx += vX;
+        }
+
+        smoothDX =
+          (1 - INPUT_SMOOTH_FACTOR) * dx + INPUT_SMOOTH_FACTOR * smoothDX;
+        smoothDY =
+          (1 - INPUT_SMOOTH_FACTOR) * dy + INPUT_SMOOTH_FACTOR * smoothDY;
+
+        model.entityTransform = initialXfo
+          .rotate(smoothDY / VERTICAL_DRAG_FACTOR, 0, 0)
+          .rotate(0, smoothDX / HORIZONTAL_DRAG_FACTOR, 0);
+      } catch (err) {
+        errors[err.message] = errors[err.message] || 0;
+        errors[err.message]++;
+        log.innerText =
+          "errors:" +
+          Object.keys(errors)
+            .map((type) => type + ":" + errors[type])
+            .join("<br>");
+      }
+    }
+
+    const model = document.querySelector("model");
+
+    await model.ready;
+    initialXfo = model.entityTransform;
+
+    model.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      document.body.classList.add("noscroll");
+    });
+
+    model.addEventListener("pointerdown", (e) => {
+      pointerDown = true;
+      startDragX = e.clientX - dx;
+      startDragY = e.clientY;
+      vX = 0;
+    });
+
+    window.addEventListener("pointermove", (e) => {
+      if (pointerDown) {
+        dx = e.clientX - startDragX;
+        dy = e.clientY - startDragY;
+        prevX = curX;
+        curX = e.clientX;
+      }
+    });
+
+    window.addEventListener("pointerup", (e) => {
+      pointerDown = false;
+      vX = curX - prevX;
+    });
+
+    requestAnimationFrame(tick);
+  </script>
+</html>
