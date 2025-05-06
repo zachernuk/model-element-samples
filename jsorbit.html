@@ -105,6 +105,8 @@
       vX = curX - prevX;
     });
 
-    requestAnimationFrame(tick);
+    if(window.HTMLModelElement) {
+      requestAnimationFrame(tick);
+    }
   </script>
 </html>
